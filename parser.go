@@ -84,7 +84,8 @@ func ParseFloat64(item interface{}) float64 {
 	}
 }
 
-func ParseString(item interface{}) string {
+/*float 时指定返回小数的位数，默认0*/
+func ParseString(item interface{}, prec ...int) string {
 	switch v := item.(type) {
 	case string:
 		return v
@@ -93,9 +94,17 @@ func ParseString(item interface{}) string {
 	case int64:
 		return strconv.FormatInt(v, 10)
 	case float64:
-		return strconv.FormatFloat(v, 10, 2, 10)
+		p := 0
+		if len(prec) > 0 {
+			p = prec[0]
+		}
+		return strconv.FormatFloat(v, 'f', p, 64)
 	case float32:
-		return strconv.FormatFloat(float64(v), 10, 2, 10)
+		p := 0
+		if len(prec) > 0 {
+			p = prec[0]
+		}
+		return strconv.FormatFloat(float64(v), 'f', p, 10)
 	default:
 		return ""
 	}
